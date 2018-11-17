@@ -15,9 +15,11 @@ a rest api call is made to active profile in seperate thread
 
 
 **Run test case** 
+
 mvn clean test -e
 
 **Run the spring boot application**
+
 mvn spring-boot:run
 
 **Access swagger-ui**
