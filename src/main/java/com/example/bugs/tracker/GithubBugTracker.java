@@ -16,19 +16,19 @@ import com.example.bugs.tracker.adapter.ResponseAdapter;
  */
 public class GithubBugTracker implements IBugTracker {
 
-	private RestTemplate restClient;
-
-	private HttpHeaders headers = new HttpHeaders();
-
-	private PayloadAdapter payloadAdapter;
-
-	private ResponseAdapter responseAdapter;
-	
-	private GithubConfiguration config;
+//	private RestTemplate restClient;
+//
+//	private HttpHeaders headers = new HttpHeaders();
+//
+//	private PayloadAdapter payloadAdapter;
+//
+//	private ResponseAdapter responseAdapter;
+//	
+//	private GithubConfiguration config;
 
 	public GithubBugTracker(RestTemplate restClient, GithubConfiguration config) {
-		this.restClient = restClient;
-		this.config = config;
+//		this.restClient = restClient;
+//		this.config = config;
 	}
 
 	@Override

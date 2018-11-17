@@ -1,4 +1,4 @@
-package com.example.bugs.tracker;
+package com.example.bugs.tracker.annotation;
 
 
 import java.lang.annotation.Documented;

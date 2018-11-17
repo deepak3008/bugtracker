@@ -5,7 +5,7 @@ import com.example.bugs.tracker.ExceptionHandlerAdvice;
 
 /**
  * This exception class is base exception class with is implemented
- * by{@link BugTrackerException} and {@link WarningTrackingException}. Any
+ * by{@link BugTrackerException} and {@link TaskTrackingException}. Any
  * custom bug tracking system exception class must extend this base exception
  * class in order for system to identify Kind of bug system encountered. Also
  * the custom exception class must be present in the
@@ -18,7 +18,7 @@ import com.example.bugs.tracker.ExceptionHandlerAdvice;
  * @see ExceptionHandlerAdvice
  * @see BugTrackingAspectConfiguration
  * @see BugTrackerException
- * @see WarningTrackingException
+ * @see TaskTrackingException
  */
 public class IssueTrackingException extends RuntimeException {
 

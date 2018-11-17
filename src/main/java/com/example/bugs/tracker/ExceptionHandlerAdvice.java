@@ -6,12 +6,13 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.RestClientResponseException;
 
 import com.example.bugs.exceptions.BugTrackerException;
-import com.example.bugs.exceptions.WarningTrackingException;
+import com.example.bugs.exceptions.TaskTrackingException;
 
 
 /**
@@ -35,8 +36,8 @@ public class ExceptionHandlerAdvice {
 		return buildResponseEntity(new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, error, ex), ex);
 	}
 	
-	@ExceptionHandler(WarningTrackingException.class)
-	public ResponseEntity<?> warningTrackingException(WarningTrackingException ex) {
+	@ExceptionHandler(TaskTrackingException.class)
+	public ResponseEntity<?> warningTrackingException(TaskTrackingException ex) {
 		String error = "It seems there were some minor performance issue in the system. We are looking into.";
 		if (ex.getMessage() != null && !ex.getMessage().isEmpty()) {
 			error = ex.getMessage();
@@ -44,6 +45,12 @@ public class ExceptionHandlerAdvice {
 		return buildResponseEntity(new ApiError(HttpStatus.OK, error, ex), ex);
 	}
 	
+	@ExceptionHandler(BindException.class)
+	public ResponseEntity<?> handleBindException(BindException ex) {
+		String error = (ex.getMessage() != null && !ex.getMessage().isEmpty()) ? ex.getMessage()
+				: "Payload validation error";
+		return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, error, ex), ex);
+	}
 	
 	@ExceptionHandler(RestClientResponseException.class)
 	public ResponseEntity<?> restClientResponseException(RestClientResponseException ex) {

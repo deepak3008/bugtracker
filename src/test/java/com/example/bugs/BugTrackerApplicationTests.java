@@ -5,17 +5,10 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-
 import com.example.bugs.exceptions.BugTrackerException;
-import com.example.bugs.exceptions.WarningTrackingException;
+import com.example.bugs.exceptions.TaskTrackingException;
 import com.example.bugs.services.BusinessLogicService;
-import com.example.bugs.services.IBusinessLogicService;
-import com.example.bugs.tracker.BugTrackingAspectConfiguration;
 
 //@RunWith(SpringRunner.class)
 //@SpringBootTest
@@ -35,7 +28,7 @@ public class BugTrackerApplicationTests {
 	
 	@Test
 	public void whenFalseGivenInBug_thenReturnTrue () {
-		boolean bool = service.someBusinessLogic(false);
+		boolean bool = service.addBug(false);
 		
 		assertThat(bool, is(true));
 	}
@@ -43,22 +36,21 @@ public class BugTrackerApplicationTests {
 	
 	@Test(expected=BugTrackerException.class)
 	public void whenTrueGivenInBug_thenThrowException () {
-		service.someBusinessLogic(true);
+		service.addBug(true);
 		
 	}
 	
 	@Test
 	public void whenFalseGivenInWarning_thenReturnTrue () {
-		boolean bool = service.someOtherBusinessLogic(false);
+		boolean bool = service.addTask(false);
 		
 		assertThat(bool, is(true));
 	}
 	
 	
-	@Test(expected=WarningTrackingException.class)
+	@Test(expected=TaskTrackingException.class)
 	public void whenTrueGivenInWarning_thenThrowException () {
-		service.someOtherBusinessLogic(true);
-		
+		service.addTask(true);	
 		
 	}
 

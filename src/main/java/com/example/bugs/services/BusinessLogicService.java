@@ -3,8 +3,10 @@ package com.example.bugs.services;
 import org.springframework.stereotype.Service;
 
 import com.example.bugs.exceptions.BugTrackerException;
-import com.example.bugs.exceptions.WarningTrackingException;
-import com.example.bugs.tracker.BugTracking;
+import com.example.bugs.exceptions.TaskTrackingException;
+import com.example.bugs.mapper.UserStoryMapper;
+import com.example.bugs.tracker.annotation.BugTracking;
+import com.example.bugs.tracker.annotation.StoryTracking;
 
 /**
  * A dummy business logic the support the functionality of {@link BugTracking}
@@ -19,22 +21,30 @@ public class BusinessLogicService implements IBusinessLogicService {
 
 	@BugTracking(expecting = BugTrackerException.class)
 	@Override
-	public boolean someBusinessLogic(boolean needBug) throws BugTrackerException {
+	public boolean addBug(boolean needBug) throws BugTrackerException {
 		if (needBug) {
-			throw new BugTrackerException("Some bug occured");
+			throw new BugTrackerException("New bug will be registed in bug tracking system");
 		}
 		return true;
 
 	}
 
-	@BugTracking(expecting = WarningTrackingException.class)
+	@BugTracking(expecting = TaskTrackingException.class)
 	@Override
-	public boolean someOtherBusinessLogic(boolean needWarning) throws WarningTrackingException {
+	public boolean addTask(boolean needTask) throws TaskTrackingException {
 
-		if (needWarning) {
-			throw new WarningTrackingException("New warning will be registed in bug tracking system ");
+		if (needTask) {
+			throw new TaskTrackingException("New task will be registed in bug tracking system ");
 		}
 		return true;
 	}
+
+	@StoryTracking
+	@Override
+	public UserStoryMapper addStory(UserStoryMapper mapper) {
+		// TODO Auto-generated method stub
+		return mapper;
+	}
+	
 
 }

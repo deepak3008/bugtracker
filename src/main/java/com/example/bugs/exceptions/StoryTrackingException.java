@@ -12,27 +12,31 @@ import com.example.bugs.tracker.ExceptionHandlerAdvice;
  * @see ExceptionHandlerAdvice
  * @see BugTrackingAspectConfiguration
  */
-public class WarningTrackingException extends IssueTrackingException {
+public class StoryTrackingException extends IssueTrackingException {
 
 	
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -6163802916463916734L;
+	private static final long serialVersionUID = -5330643908656881291L;
+	/**
+	 * 
+	 */
+	
 	private String msg;
 
-	public WarningTrackingException() {
+	public StoryTrackingException() {
 		super();
 	}
 
-	public WarningTrackingException(String msg) {
+	public StoryTrackingException(String msg) {
 		super(msg);
 		this.msg = msg;
 
 	}
 
-	public WarningTrackingException(String msg, Throwable t) {
+	public StoryTrackingException(String msg, Throwable t) {
 		super(msg, t);
 		this.msg = msg;
 	}
@@ -55,7 +59,7 @@ public class WarningTrackingException extends IssueTrackingException {
             return false;
         }
 		
-		WarningTrackingException i = (WarningTrackingException)o;
+		StoryTrackingException i = (StoryTrackingException)o;
 		return i.getMsg()==getMsg();
 	}
 	

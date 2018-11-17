@@ -5,6 +5,7 @@ import java.io.StringWriter;
 
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -19,7 +20,9 @@ import org.springframework.web.client.RestTemplate;
 import com.example.bugs.exceptions.BugTrackerException;
 import com.example.bugs.exceptions.BugTrackerProfileNotFoundException;
 import com.example.bugs.exceptions.IssueTrackingException;
-import com.example.bugs.exceptions.WarningTrackingException;
+import com.example.bugs.exceptions.TaskTrackingException;
+import com.example.bugs.mapper.UserStoryMapper;
+import com.example.bugs.tracker.annotation.BugTracking;
 
 /**
  * This class provides the configuration need to setup the Bug tracking cross
@@ -32,14 +35,14 @@ import com.example.bugs.exceptions.WarningTrackingException;
  */
 @Aspect
 @Configuration
-@EnableAspectJAutoProxy(proxyTargetClass=true)
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 public class BugTrackingAspectConfiguration {
 
 	@Autowired
 	private Environment env;
 
 	private Logger log = Logger.getLogger(getClass());
-	
+
 	@Autowired
 	private AbstractProperties config;
 
@@ -71,7 +74,8 @@ public class BugTrackingAspectConfiguration {
 	}
 
 	/**
-	 * Create the singleton restTemplete bean 
+	 * Create the singleton restTemplete bean
+	 * 
 	 * @return
 	 */
 	@Bean
@@ -86,7 +90,7 @@ public class BugTrackingAspectConfiguration {
 	 * @param joinPoint
 	 * @param ex
 	 */
-	@AfterThrowing(value = "@annotation(com.example.bugs.tracker.BugTracking)", throwing = "ex")
+	@AfterThrowing(value = "@annotation(com.example.bugs.tracker.annotation.BugTracking)", throwing = "ex")
 	public void afterThrowing(JoinPoint joinPoint, IssueTrackingException ex) {
 		// Since join pint contains the information about the function point cut e.g.
 		// function that id being executed
@@ -98,16 +102,16 @@ public class BugTrackingAspectConfiguration {
 		BugTracking b = signature.getMethod().getAnnotation(BugTracking.class);
 		Object e = b.expecting();
 		BugTrackerPayload payload = new BugTrackerPayload();
-		StringWriter sr = new  StringWriter();		
+		StringWriter sr = new StringWriter();
 		PrintWriter pr = new PrintWriter(sr);
 		ex.printStackTrace(pr);
 		if (e.equals(BugTrackerException.class)) {
 			payload.setTitle("Bug In " + methodName);
 			payload.setLabel("Bug");
 			payload.setDescription(sr.toString());
-		} else if (e.equals(WarningTrackingException.class)) {
-			payload.setTitle("Warning In " + methodName);
-			payload.setLabel("Warning");
+		} else if (e.equals(TaskTrackingException.class)) {
+			payload.setTitle("Task In " + methodName);
+			payload.setLabel("Task");
 			payload.setDescription(sr.toString());
 		} else {
 			payload.setTitle("Unknown Bug in " + methodName);
@@ -115,12 +119,38 @@ public class BugTrackingAspectConfiguration {
 			payload.setDescription(sr.toString());
 		}
 		try {
-			getBugTracker().addIssue(payload);	
+			Thread t = new Thread(new Runnable(){
+			    @Override
+			    public void run() {
+			    	getBugTracker().addIssue(payload);
+			    }
+			});
+			t.start();
 		} catch (RestClientResponseException ee) {
 			throw ee;
 		}
 		throw ex;
 
+	}
+
+	@AfterReturning(value = "@annotation(com.example.bugs.tracker.annotation.StoryTracking)", returning = "result")
+	public void afterReturning(Object result) {
+
+		UserStoryMapper mapper = (UserStoryMapper)result;
+		
+		BugTrackerPayload payload = new BugTrackerPayload(mapper.getStory(), mapper.getDescription(), "Story");		
+		try {
+			Thread t = new Thread(new Runnable(){
+			    @Override
+			    public void run() {
+			    	getBugTracker().addIssue(payload);
+			    }
+			});
+			t.start();
+			
+		} catch (RestClientResponseException ee) {
+			throw ee;
+		}
 	}
 
 }
