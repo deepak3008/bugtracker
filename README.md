@@ -14,13 +14,13 @@ addIssue method then Convert the payload into either jira or github depending in
 a rest api call is made to active profile in seperate thread
 
 
-** Run test case** 
+**Run test case** 
 mvn clean test -e
 
 **Run the spring boot application**
 mvn spring-boot:run
 
-** Access swagger-ui**
+**Access swagger-ui**
 
 [Access swagger-ui](http://localhost:8080/swagger-ui.html)
 
