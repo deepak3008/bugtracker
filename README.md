@@ -9,7 +9,7 @@ The advice is executed at join point "BugTracking" and "StoryTracking" annotatio
 
 advice prepare the payload and sends it to the instance method addIssue
 
-addIssue method then Convert the payload into either jira or github depending in which profile is active
+addIssue method then Convert the payload into either jira or github depending in which profile is active using PayloadAdapter
 
 a rest api call is made to active profile in seperate thread
 
